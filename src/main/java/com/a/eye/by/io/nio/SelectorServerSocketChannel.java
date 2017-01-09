@@ -15,10 +15,11 @@ public class SelectorServerSocketChannel {
         try {
             ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
 
-            serverSocketChannel.bind(new InetSocketAddress(8999));
+            serverSocketChannel.bind(new InetSocketAddress(9888));
 
             Selector selector = Selector.open();
 
+            serverSocketChannel.configureBlocking(false);
             serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
             while (true) {
