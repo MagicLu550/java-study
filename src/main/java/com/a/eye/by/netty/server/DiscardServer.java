@@ -27,7 +27,7 @@ public class DiscardServer {
 
             serverBootstrap.channel(NioServerSocketChannel.class);
 
-            serverBootstrap.childHandler(null);
+            serverBootstrap.childHandler(new DiscardServerHandler());
 
             serverBootstrap.option(ChannelOption.SO_BACKLOG, 128);
 
