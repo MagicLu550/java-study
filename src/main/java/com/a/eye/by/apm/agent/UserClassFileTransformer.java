@@ -13,7 +13,7 @@ public class UserClassFileTransformer implements ClassFileTransformer {
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
             ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
 
-        if ("".equals(className)) {
+        if ("com.a.eye.by.apm.agent.User".equals(className)) {
             try {
                 CtClass ctClass = ClassPool.getDefault().get(className.replace('/', '.'));
 
