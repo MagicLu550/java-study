@@ -3,3 +3,20 @@
 1、MyISAM不支持事物，表锁，支持全文检索，不支持外键，表空间相对比较小，关注的主要是查询的性能。
 2、InnoDB支持事物，行锁，不支持全文检索，支持外检，表空间相对比较大，关注的是事务。
 3、MyISAM的读性能比InnoDB强。
+三、数值类型：
+1、tinyint 1个字节
+2、smallint 2个字节
+3、mediumint 3个字节
+4、int 4个字节
+5、bigint 8个字节
+6、float 4个字节
+7、double 8个字节
+8、bit 1-8个字节
+四、日期类型
+1、如果表示年月日用date
+2、如果标示年月日时分秒，用datetime和timestamp
+3、如果表示十分秒，用time
+4、如果表示年，用year
+五、datetime和timestamp的区别：
+1、timestamp支持的时间范围比较小，从1970年到2038年的某个时间。
+2、timestamp的查询和插入受当地时区的影响。
