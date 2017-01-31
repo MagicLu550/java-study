@@ -1,0 +1,1 @@
+一、Kafka是一个高性能、高可用、可持久化的，为分布式设计的消息中间件。Kafka主要包括，consumer、broker、producer。
