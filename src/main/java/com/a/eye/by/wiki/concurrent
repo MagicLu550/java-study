@@ -1,0 +1,6 @@
+一、jdk1.5以后，推出了java.util.concurrent包
+二、Executor：具体的Runnable的执行者
+三、ExecutorService：一个线程池的管理者，其实现类有很多，可以把Runnable、Callable提交到线程池中调用。
+四、Semaphore：信号量。
+五、ReentrantLock：可重入的互斥锁。
+六、Future：与Runnable、Callable接口进行交互。
