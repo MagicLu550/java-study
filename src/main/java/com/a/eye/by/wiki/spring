@@ -1,4 +1,9 @@
 一、Spring IOC：
 1、控制反转，依赖注入，目的是解耦，内部实现是反射。
 2、Spring bean 容器，AutoWired 默认是byType。
-3、
+3、Resource 默认是byName，也可以是byType
+4、postConstruct 在bean初始化完成之后执行
+5、preDestory 在bean销毁前调用
+6、通过在类上使用 @Repository、@Component、@Service 和 @Constroller 注解，Spring 会自动创建相应的 BeanDefinition
+对象，并注册到 ApplicationContext 中。这些类就成了 Spring 受管组件。这三个注解除了作用于不同软件层次的类，
+其使用方式与 @Repository 是完全相同的。
