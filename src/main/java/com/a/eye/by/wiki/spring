@@ -7,3 +7,12 @@
 6、通过在类上使用 @Repository、@Component、@Service 和 @Constroller 注解，Spring 会自动创建相应的 BeanDefinition
 对象，并注册到 ApplicationContext 中。这些类就成了 Spring 受管组件。这三个注解除了作用于不同软件层次的类，
 其使用方式与 @Repository 是完全相同的。
+二、spring bean 的生命周期
+1、init-method
+2、destory-method
+三、Sping bean的作用范围（scope）
+1、singleton
+2、prototype
+3、request
+4、session
+5、global
