@@ -1,0 +1,4 @@
+一、Spring IOC：
+1、控制反转，依赖注入，目的是解耦，内部实现是反射。
+2、Spring bean 容器，AutoWired 默认是byType。
+3、
