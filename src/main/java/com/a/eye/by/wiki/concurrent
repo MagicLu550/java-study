@@ -8,3 +8,10 @@
 八、CompletionService:ExecutorService的扩展，可以活得最先执行完线程的结果，底层实现是通过阻塞队列。
 九、CountDownLatch：一个同步辅助类，完成一组正在其他线程中执行的操作之前，允许一个或者多个线程一直等待。
 十、CyclicBarrier：一个同步辅助类，它允许一组线程互相等待，直到达到某个屏障点。
+十一、CopyOnWriteArrayList：
+1、在CopyOnWriteArrayList在处理写（包括add、set、remove）操作的时候，先将原始数据通过Array.copyOf来生成一个新的数组，
+在新的数据对象上写，写完后再将原来的引用指向当前的数据对象，并加锁。
+2、读操作在引用的当前引用的对象上进行读，不存在加锁和阻塞。
+3、因为每次使用CopyOnWriteArrayList.add都要引起数组拷贝，所以应该避免在循环中使用。可以在初始化完成之后设置到CopyeOnWriteArrayList中，或者使用CopyOnWriteArrayList.addAll方法。
+4、CopyOnWriteArrayList采用“写入时复制”策略，对容器的写操作将导致的容器中基本数据的复制，性能开销较大。所以在有写操作的情况下，CopyOnWriteArayList性能不佳，而且如果容器容量较大的话容易造成溢出。
+
