@@ -16,3 +16,19 @@
 3、request
 4、session
 5、global
+
+四、Spring AOP:
+1、Spring aop的实现是通过jdk的动态代理，和CGLib。
+2、jdk的动态代理基于接口，需要先定义接口。
+3、jdk的动态代理，实现InvocationHandler接口，重写invoke方法，new Proxy.newProxyInstance(ClassLoader,interfaces,invocationHandler)
+
+
+
+
+
+
+
+
+
+
+
