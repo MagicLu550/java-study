@@ -1,0 +1,17 @@
+一、元注解：
+1、@Target
+2、@Document
+3、@Retention
+4、@Inherited
+二、@Target，注解的修饰的范围
+1、ElementType.CONSTRUCTOR 构造器
+2、ElementType.METHOD 方法
+3、ElementType.FIELD 属性
+4、ElementType.TYPE 接口或者类
+5、ElementType.PARAMETER 参数
+6、ElementType.PACKAGE 包
+三、Retention 注释修饰的时间
+1、RetentionPolicy.RESOURCE 源文件保留
+2、RetentionPolicy.RUNTIME 运行时保留
+3、RetentionPolicy.CLASS class文件保留
+四、@Inherited 元注解的一个标记注解，被标注的类型是被继承的。
