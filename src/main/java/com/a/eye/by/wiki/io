@@ -1,0 +1,32 @@
+一、字节流：
+1、字节流可以处理一切（文本、音频、视频）
+2、输入流 InputStream FileInputStream ByteArrayInputStream
+3、操作read字节数组
+中间容器 byte[] flush = new byte[长度]，接收长度 int len = 0，循环读取while(-1!=(len=流.read(flush)))。输出拷贝
+4、输出流 OutputStream FileOutputStream ByteArrayOutputStream
+5、操作write(字节数组,0,长度)
+
+二、字符流
+1、字符流，只能处理纯文本
+2、输入流 Reader FileReader
+3、操作read（字符数组）
+4、中间容器 byte[] flush = new byte[长度]，接收长度 int len = 0，循环读取while(-1!=(len=流.read(flush)))。输出拷贝
+5、输出流：Writer FileWriter
+6、操作write(字节数组,0,长度)
+
+三、字节流和字符流转换
+1、输入流 InputStreamReader 解码
+2、输出流 OutputStreamWriter 编码
+
+四、缓冲流
+1、输入流：BufferedInputStream BufferedReader
+2、输出流：BufferedOutputStream BufferedWriter
+
+五、处理数据+类型
+1、输入流：DataInputStream readXxx
+2、输出流：DataOutputStream writeXxx
+3、引用类型
+3.1 反序列化 ObjectInputStream readObject
+3.2 序列化 ObjectOutputStream wirteObject
+
+六、打印流：PrintStream
