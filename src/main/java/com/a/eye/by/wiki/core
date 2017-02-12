@@ -13,3 +13,13 @@ getInstance，渠道的状态就是不正确的对象。
 3、当其中一个机器节点挂掉后，另外一个节点会承担挂掉节点的数据，另外一个节点很容易宕机。
 4、引入"虚拟节点"的概念：即把想象在这个环上有很多“虚拟节点”，数据的存储是沿着环的顺时针方向找一个虚拟节点，每个虚拟节点都会关联到一个真实节点。由于这些
 虚拟节点数量很多，均匀分布，因此不会造成“雪崩”现象。
+四、equals 和 hashcode
+在Java中任何一个对象都具备equals(Object obj)和hashcode()这两个方法，因为他们是在Object类中定义的。 
+equals(Object obj)方法用来判断两个对象是否“相同”，如果“相同”则返回true，否则返回false。 
+hashcode()方法返回一个int数，在Object类中的默认实现是“将该对象的内部地址转换成一个整数返回”。
+若重写equals(Object obj)方法，有必要重写hashcode()方法，确保通过equals(Object obj)方法判断结果为true的两个对象具备相等的hashcode()返回值
+Oject类中的equals方法用来比较两个引用值，hashCode用来返回引用的内地址的十六进制数值。在Set以及Map集合中，判断两个元素是否重复时，往往需要使用这两个方法。这两个方法往往被子类覆盖
+1、如果两个对象equals，Java运行时环境会认为他们的hashcode一定相等。 
+2、如果两个对象不equals，他们的hashcode有可能相等。 
+3、如果两个对象hashcode相等，他们不一定equals。 
+4、如果两个对象hashcode不相等，他们一定不equals。 
