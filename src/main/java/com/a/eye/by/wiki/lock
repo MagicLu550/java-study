@@ -32,3 +32,54 @@ lock和unlock配合try/finally来配合完成，ReentrantLock比synchronized有�
 2、当两个并发线程访问同一个对象object中的这个synchronized(this)同步代码块时， 一个时间内只能有一个线程得到执行。另一个线程必须等待当前线程执行完这个代码块以后才能执行该代码块；
 3、尤其关键的是，当一个线程访问object的一个synchronized(this)同步代码块时， 其他线程对object中所有其它synchronized(this)同步代码块的访问将被阻塞；
 4、Java中的每一个对象都可以作为锁，对于同步方法，锁是当前实例对象，对于静态同步方法，锁是当前对象的Class对象，对于同步方法块，锁是Synchonized括号里配置的对象；
+十二、JAVA concurrent包下的类：
+Executors
+ Executor
+ ExecutorService
+ ScheduledExecutorService
+ Callable
+ Future
+ ScheduledFuture
+ Delayed
+ CompletionService
+ ThreadPoolExecutor
+ ScheduledThreadPoolExecutor
+ AbstractExecutorService
+ Executors
+ FutureTask
+ ExecutorCompletionService
+Queues
+ BlockingQueue
+ ConcurrentLinkedQueue
+ LinkedBlockingQueue
+ ArrayBlockingQueue
+ SynchronousQueue
+ PriorityBlockingQueue
+ DelayQueue
+Concurrent Collections
+ ConcurrentMap
+ ConcurrentHashMap
+ CopyOnWriteArray{List,Set}
+Synchronizers
+ CountDownLatch
+ Semaphore
+ Exchanger
+ CyclicBarrier
+Timing
+ TimeUnit
+Locks
+ Lock
+ Condition
+ ReadWriteLock
+ AbstractQueuedSynchronizer
+ LockSupport
+ ReentrantLock
+ ReentrantReadWriteLock
+Atomics
+ Atomic[Type], Atomic[Type]Array
+ Atomic[Type], FieldUpdater
+ Atomic{Markable, Stampable}Reference
+ 
+
+
+
