@@ -82,6 +82,14 @@ Atomics
  Atomic[Type], Atomic[Type]Array
  Atomic[Type], FieldUpdater
  Atomic{Markable, Stampable}Reference
+
+十三、原子性、可见性、有序性
+1、原子性：由java内存模型来直接保证原子性变量操作包括：lock、unlock、read、load、assign、use、store和write 。
+2、可见性：当一个线程修改了共享变量的值，其他线程能够立即知道这个修改。java内存模型是通过在变量修改后将新值同步回
+主内存，在变量读取之前需要从主内存刷新变量值这种依赖猪内存作为传递媒介的方式来实现的可见性。除了volatitle关键字外，
+还有2个synchronized、final。
+3、有序性：java提供了volatitle和synchronized关键字来保证线程之间操作的有序性。
+
  
 
 
