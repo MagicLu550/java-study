@@ -1,9 +1,9 @@
 一、字节流：
 1、字节流可以处理一切（文本、音频、视频）
-2、输入流 InputStream FileInputStream ByteArrayInputStream
+2、输入流 InputStream FileInputStream ByteArrayInputStream ObjectInputStream BufferedInputStream FilterInputStream DataInputStream
 3、操作read字节数组
 中间容器 byte[] flush = new byte[长度]，接收长度 int len = 0，循环读取while(-1!=(len=流.read(flush)))。输出拷贝
-4、输出流 OutputStream FileOutputStream ByteArrayOutputStream
+4、输出流 OutputStream FileOutputStream ByteArrayOutputStream ObjectOutputStream BufferedOutputStream DataOutputStream
 5、操作write(字节数组,0,长度)
 
 二、字符流
@@ -30,3 +30,67 @@
 3.2 序列化 ObjectOutputStream wirteObject
 
 六、打印流：PrintStream
+
+七、IO流分类
+1、基于字节操作的IO接口：InputStream、OutputStream
+2、基于字符操作的IO接口：Reader、Writer
+3、基于磁盘操作的IO接口：File
+4、基于网络操作的IO接口：Socket
+
+八、字节和字符转换
+1、InputStreamReader：从字节流转换成字符流，转换是需要指定编码格式，否则很容易出现乱码，StreamDecoder正是完成字节到字符的解码实现类。
+2、OutputStreamWriter：从字符流转换成字节流，由StreamEncoder完成编码过程。
+
+九、磁盘IO工作机制：
+9.1几种访问文件的方式：
+1、标准访问文件方式：
+read接口，首先读取用户地址空间的缓存是否存在，如果存在直接返回，如果不存在，读取内核空间的高速页缓存，如果没有则读取磁盘空间。
+write接口，首先将数据从用户地址空间复制到内核地址空间的缓存中，这时对用户来说操作已经完成，至于什么时候写入磁盘由操作系统决定，也可以调用sync同步完成。
+2、直接IO访问方式：就是应用程序直接访问磁盘，不经过操作系统内核数据缓存区，目的为了减少一次从内核缓冲区到用户缓冲区数据的复制。例如数据库管理系统。操作系统很难知道哪些是热点数据，操作系统
+只是简单的缓存最近一次从磁盘读取的数据。直接IO访问数据，如果不在应用程序缓存中，那么每次直接从磁盘加载，会非常慢。
+read接口：首先读取用户地址空间的缓存，如果有直接返回，没有则直接访问磁盘空间。
+write接口：首先写入应用地址空间的缓存，然后再写入磁盘空间。
+3、同步访问文件方式：同步访问文件的方式就是数据的读取和写入都是同步操作的，与标准访问文件方式不同的是，只有当数据被成功写入到磁盘时，才返回给应用程序成功的标识。
+这种访问方式性能比较差，只有在一些对数据安全要求比较高的场景才使用。
+4、异步访问文件方式：当访问数据的线程发出请求后，线程会继续处理其他事情，而不是阻塞等待，当请求的数据返回后继续处理下面的操作。这种访问方式明显提高应用程序的效率，但是不会改变访问文件的效率。
+5、内存映射的方式：内存映射是操作系统将内存中的某一个区域与磁盘中的文件关联起来，当要访问内存中的一段数据时，转换成访问文件的某一段数据，这种方式的目的是同样减少数据从内核空间缓存到用户空间的数据
+复制操作，因为这两个空间的数据是共享的。
+9.2java访问磁盘文件：
+java中通常的File并不代表是一个真是存在的文件对象，当你指定一个路径描述符时，它就会返回一个代表这个路径的虚拟对象，可能是一个真是存在的文件或者是一个包含多个文件的目录。FileDescriptor对象，就是
+真正代表一个存在文件对象的描述。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
