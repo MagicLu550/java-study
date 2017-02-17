@@ -1,0 +1,13 @@
+一、Spring Event
+Spring的事件，为Bean与Bean之间的消息通信提供了支持。当一个Bean处理完一个任务之后，另外一个Bean知道并能做相应的处理。
+这时我们需要让另外一个Bean监听当前Bean所发送的事件。
+1、自定义事件，集成ApplicationEvent
+2、定义事件监听器，实现ApplicationListener
+3、使用容器发布事件
+实现方式：
+1、实现ApplicationListener接口，并指定监听的事件类型
+2、使用onApplicationEvent方法对消息进行接受处理
+3、事件的发布类
+	注入ApplicationContext用来发布事件
+	使用ApplicationContext的publishEvent方法来发布
+	配置类
