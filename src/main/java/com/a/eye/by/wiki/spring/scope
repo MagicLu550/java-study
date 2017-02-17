@@ -1,0 +1,8 @@
+Scope描述的是Spring容易如何创建Bean的实例。
+Spring的Scope有以下几种，通过@Scope来实现
+1、Singleton：一个Spring容器中只有一个Bean实例，此为Spring的默认配置。
+2、Prototype：每次调用新建一个Bean实例
+3、Request：Web项目中，给每一个Http Request新建一个bean实例。
+4、Session：Web项目中，给每一个Http Session新建一个Bean实例。
+5、GlobalSession：在portal应用中有，给每一个global http session 创建一个实例
+6、在Spring Batch 中还有一个Scope是使用@StepScope

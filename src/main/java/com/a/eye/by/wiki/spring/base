@@ -1,0 +1,50 @@
+Spring基础配置
+一、spring框架的四大原则
+1、使用POJO进行轻量级和最小侵入式开发
+2、通过依赖注入和基于接口编程实现松耦合
+3、通过AOP和默认习惯进行声明式编程
+4、使用AOP和模板减少模块化代码
+二、Spring IOC
+1、Spring IOC负责创建容器Bean，Spring提供使用XML、注解、JAVA配置、groovy配置实现Bean的创建注入。
+2、声明Bean的注解
+	@Component组建，没有明确的角色
+	@Service在业务逻辑层使用（service层）
+	@Repository在数据访问层使用（dao层）
+	@Controller在业务展现层（MVC->Spring MVC）使用
+3、注入Bean的注解
+	@Autowired：spring提供的注解
+	@Inject: JSR-330提供的注解
+	@Resource: JSR-250提供的注解
+4、Java配置
+java配置是spring 4.x推荐的配置方式，可以完全替代Xml配置，java配置也是Spring Boot推荐的配置方式。
+Java配置是通过@Configuration和@Bean来实现的
+	@Configuration 声明当前类是一个配置类，相当于一个Spring配置的xml文件
+	@Bean 注解在方法上，生命当前方法的返回值是一个Bean
+5、注解的使用原则：全局配置是用java配置（如数据库相关配置、MVC相关配置），业务Bean的配置使用注解配置（@Service @Component、@Repository、@Controller）。
+三、Spring AOP
+1、AOP面向切面编程，目的是为了解耦
+2、Spring支持AspectJ的注解式切面编程
+	使用@Aspect 声明一个切面
+	使用@After、@Before、@Around定义建言（Advice），可以直接拦截规则（切点）作为参数。
+	其中@After、@Before、@Around参数的拦截规则为切点（PointCut），可以使用@pointCut专门定义拦截规则，然后在@After、@Before、@Around参数中调用。
+	其中符合条件的每一个被拦截处为连接点（JointPoint）
+四、Bean的初始化和销毁
+Bean在使用之前和销毁之前需要做些必要的操作，Spring对bean的生命周期提供了支持
+1、java配置方式：使用@Bean的initMethod和destoryMethod。相当于xml中的init-method和destory-method
+2、注解方式：利用JSR-250的@PostConstruct和@PreDestroy
+五、Profile
+Profile为在不同环境下使用不同的配置提供支持，例如开发环境和生产环境的配置
+1、通过Environment的ActiveProfiles来设定当前Context需要使用的配置环境。在开发中使用@Profile注解类或者方法，达到在不同环境下选择实例化不同的Bean。
+2、通过JVM的spring.profiles.active参数来设置配置环境。
+3、Web项目设置在Servlet的context parameter中
+六、Spring Event
+
+
+
+
+
+
+
+
+
+
