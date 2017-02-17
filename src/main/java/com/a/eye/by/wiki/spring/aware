@@ -1,0 +1,11 @@
+Spring Aware
+1、Spring Aware的目的是为了让Bean获得SPring容器的服务，Spring Aware本来就是Spring设计用来框架内部使用的，若使用了Spring Aware
+你的Bean，将和Spring框架耦合。
+BeanNameAware，获得到容器Bean的名称
+BeanFactoryAware，获取当前bean factory，这样可以调用容器的服务
+ApplicationContextAware* 当前的application context，这样可以调用容器的服务
+MessageSourceAware 获取message source，这样可以获得文本信息
+ApplicationEventPublisherAware 应用的发布器
+ResourceLoaderAware，获得资源加载器，获得外部资源文件
+2、ApplicationContext接口集成了MessageSource接口、ApplicationEventPublisher接口和ResourceLoader接口，所以Bean继承ApplicationContextAware
+可以活得Spring容器的所有服务，但是原则上还是用到什么接口，就实现什么接口。
