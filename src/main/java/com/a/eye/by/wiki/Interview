@@ -33,9 +33,16 @@ RateLimite允许某次请求拿走超出剩余令牌数的令牌，但是下一�
 在 ThreadPoolExecutor.DiscardPolicy 中，不能执行的任务将被删除。
 在 ThreadPoolExecutor.DiscardOldestPolicy 中，如果执行程序尚未关闭，则位于工作队列头部的任务将被删除，然后重试执行程序（如果再次失败，则重复此过程）。
 
-
 四、除了kv类型的数据存储外，redis适合的业务场景
 五、如果解决写操作跨库的数据一致性问题
 六、spring aop如何实现，两种的区别，描述一下java动态代理的实现
 七、什么是乐观锁，乐观锁的机制是什么，
 八、线程通信
+线程间通信和同步的方式主要有锁、信号、信号量
+进程间的通信：通信机制主要有：管道、有名管道、消息队列、信号量、共享空间、信号、套接字（socket）
+java线程通信 wait、notify、notifyAll、concurrent包lock下的condition里的await、signal、signalALl方法
+
+
+
+
+
