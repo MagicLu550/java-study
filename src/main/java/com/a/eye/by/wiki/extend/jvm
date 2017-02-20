@@ -1,0 +1,29 @@
+2.常见的OOM异常及解决思路 
+(1) java.lang.OutOfMemoryError: unable to create new native thread
+当调用new Thread时，如已创建不了线程了，则会抛出此错误，如果是JDK内部必须创建成功的线程，那么会造成Java进程退出，如果是用户线程，则仅抛出OOM，
+创建不了的原因通常是创建了太多线程，耗尽了内存，通常可通过减少创建的线程数，或通过-Xss调小线程所占用的栈大小来减少对Java 对外内存的消耗。
+(2)java.lang.OutOfMemoryError: request bytes for . Out of swap space?
+当JNI模块或JVM内部进行malloc操作（例如GC时做mark）时，需要消耗堆外的内存，如此时Java进程所占用的地址空间超过限制（例如windows: 2G，Linux: 3G），
+或物理内存、swap区均使用完毕，那么则会出现此错误，当出现此错误时，Java进程将会退出。
+(3)java.lang.OutOfMemoryError: Java heap space(堆溢出) ,这是最常见的OOM错误
+【解决思路】 
+a.增加Java虚拟机中Xms（初始堆大小）和Xmx（最大堆大小）参数的大小 
+b.检查是否发生内存泄漏 
+c.看是否有死循环或不必要地重复创建大量对象 
+(4) java.lang.OutOfMemoryError: GC overhead limit execeeded
+当通过new创建对象或数组时，如Java Heap空间不足，且GC所使用的时间占了程序总时间的98%，且Heap剩余空间小于2%，则抛出此错误，以避免Full GC一直执行，可通过UseGCOverheadLimit来决定是否开启这种策略，
+可通过GCTimeLimit和GCHeapFreeLimit来控制百分比。
+(5) java.lang.OutOfMemoryError: PermGen space（方法区或者运行时常量池溢出）
+【解决思路】 
+a.增加java虚拟机中的XX:PermSize和XX:MaxPermSize参数的大小 
+b.频繁使用CGLib，动态代理，反射GeneratedConstructorAccessor需要强大的方法区来支撑 
+(6)java.lang.StackOverflowError 虚拟机栈和本地方法栈溢出 
+
+说明：对于以上几种OOM错误，其中容易造成严重后果的是Out of swap space这种，因为这种会造成Java进程退出，而其他几种只要不是在main线程抛出的，就不会造成Java进程退出。
+
+3.什么情况下会出现OOM？
+(1)内存泄漏（连接未关闭，单例类中不正确引用了对象）
+(2)代码中存在死循环或循环产生过多重复的对象实体
+(3)Space大小设置不正确
+(4)内存中加载的数据量过于庞大，如一次从数据库取出过多数据
+(5)集合类中有对对象的引用，使用完后未清空，使得JVM不能回收
