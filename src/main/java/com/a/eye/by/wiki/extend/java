@@ -18,3 +18,22 @@
 4、LinkedHashSet
 HashSet还有一个子类LinkedHashSet，其集合也是根据元素hashCode值来决定元素的存储位置，但它同时用链表来维护元素的次序，这样使得元素看起来是以插入的顺序保存的，也就是说，当遍历LinkedHashSet集合元素时，它将会按元素的添加顺序来访问集合里的元素。
 所以LinkedHashSet的性能略低于HashSet，但在迭代访问全部元素时将有很好的性能，因为它以链表来维护内部顺序。
+
+二、Java类加载器
+一个jvm中默认的classloader有Bootstrap ClassLoader、Extension ClassLoader、App ClassLoader，分别各司其职：
+1、Bootstrap ClassLoader(引导类加载器) 负责加载java基础类，主要是 %JRE_HOME/lib/目录下的rt.jar、resources.jar、charsets.jar等
+2、Extension ClassLoader(扩展类加载器) 负责加载java扩展类，主要是 %JRE_HOME/lib/ext目录下的jar等
+3、App ClassLoader(系统类加载器) 负责加载当前java应用的classpath中的所有类。 classloader 加载类用的是全盘负责委托机制。
+所谓全盘负责，即是当一个classloader加载一个Class的时候，这个Class所依赖的和引用的所有 Class也由这个classloader负责载入，除非是显式的使用另外一个classloader载入。 
+所以，当我们自定义的classloader加载成功了com.company.MyClass以后，MyClass里所有依赖的class都由这个classLoader来加载完成。
+
+三、JVM工具
+命令行
+jps(jvm processor status)虚拟机进程状况工具
+jstat(jvm statistics monitoring)统计信息监视
+jinfo(configuration info for java)配置信息工具
+jmap(memory map for java)Java内存映射工具
+jhat(JVM Heap Analysis Tool)虚拟机堆转储快照分析工具
+jstack(Stack Trace for Java)Java堆栈跟踪工具
+HSDIS：JIT生成代码反汇编
+可视化 1. JConsole(Java Monitoring and Management Console):Java监视与管理控制台 2. VisualVM(All-in-one Java Troubleshooting Tool):多合一故障处理工具
