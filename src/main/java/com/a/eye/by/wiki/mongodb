@@ -36,3 +36,14 @@
 高伸缩性的场景：Mongo非常适合由数十或数百台服务器组成的数据库。Mongo的路线图中已经包含对MapReduce引擎的内置支持。
 用于对象及JSON数据的存储：Mongo的BSON数据格式非常适合文档化格式的存储及查询。
 
+五、与传统数据库对比
+MongoDb是由数据库databse、集合collection、文档对象document三个层次组成。
+
+六、索引
+MongoDB提供了多样性的索引支持，索引信息被保存在sytem.indexes中，且默认为_id创建索引，它的索引使用基本和mysql一样。
+
+
+
+
+
+
