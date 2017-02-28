@@ -1,0 +1,6 @@
+一、Java的异步IO
+1、Java的NIO主要由三个部分组成，缓冲区buffers、通道Channels和Selector组成。
+2、NIO是基于事件驱动思想来实现的，它采用Reactor模式实现，主要用来解决BIO模型中一个服务端无法同时并发处理大量客户端连接的问题。NIO基于
+Selector进行轮询，当socket有数据可读、可写、连接完成、新的TCP请求接入事件时，操作系统内核会触发Selector返回准备就绪的SelectionKey的集合，
+通过SelectableChannel进行读写操作。由于Jdk的Selector底层基于epoll实现，因此不受限2048连接数的限制。SelectableChannel的读写操作都是
+异步的非阻塞的。一个Reactor线程可以同时处理N个客户端的连接，解决了BIO的已连接一线程的弊端。
