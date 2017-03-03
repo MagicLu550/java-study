@@ -1,0 +1,7 @@
+一、HBase的一些内存实现原理：
+HMaster— HBase中仅有一个Master server。
+HRegionServer—负责多个HRegion使之能向client端提供服务，在HBase cluster中会存在多个HRegionServer。
+ServerManager—负责管理Region server信息，如每个Region server的HServerInfo(这个对象包含HServerAddress和startCode),已load Region个数，死亡的Region server列表
+RegionManager—负责将region分配到region server的具体工作，还监视root和meta 这2个系统级的region状态。
+RootScanner—定期扫描root region，以发现没有分配的meta region。
+MetaScanner—定期扫描meta region,以发现没有分配的user region。
