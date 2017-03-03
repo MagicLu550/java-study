@@ -1,0 +1,45 @@
+1、Hbase表：
+HBase中有两个特殊的表： -ROOT- 和 .META. 。
+-ROOT-：记录.META.表的Region信息。
+.META.：记录用户表的Region信息。
+
+一、META表结构
+1) RowKey
+RowKey就是Region Name，它的命名形式是 TableName,StartKey,TimeStamp.Encoded. 。
+其中 Encoded 是 TableName,StartKey,TimeStamp 的md5值。
+例如：
+mytable,,1438832261249.ea2b47e1eba6dd9a7121315cdf0e4f67.
+表名是 mytable ，StartKey为空，时间戳是 1438832261249 ，前面三部分的md5是
+
+2) Column Family
+.META. 表有两个Column Family： info 和 historian 。
+其中 info 包含了三个Column：
+regioninfo ：region的详细信息，包括StartKey、EndKey以及Table信息等等。
+server ：管理该region的 RegionServer 的地址。
+serverstartcode ：RegionServer 开始托管该region的时间。
+至于 historian ：
+这个Column Family是用来追踪一些region操作的，例如open、close、compact等。
+事实证明这非常的麻烦，所以在想出一个更好的解决方案之前我们禁用了此功能。这个列族会保持向后兼容。
+
+.META. 表中保存了所有用户表的region信息，在进行数据访问时，它是必不可少的一个环节。
+当Region被拆分、合并或者重新分配的时候，都需要来修改这张表的内容 来保证访问数据时能够正确地定位region。
+
+二、ROOT表结构
+当用户表特别大时，用户表的region也会非常多。 .META. 表存储了这些region信息，也变得非常大，这时 .META. 自己也需要划分成多个Region，托管到多个RegionServer上。
+这时就出现了一个问题： 当 .META. 被托管在多个RegionServer上，如何去定位 .META. 呢？ 
+HBase的做法是用另外一个表来记录 .META. 的Region信息，就和 .META. 记录用户表的Region信息一样，这个表就是 -ROOT- 表。
+
+除了没有 historian 列族之外，-ROOT- 表的结构与 .META. 表的结构是一样的。另外， -ROOT- 表的 RowKey 没有采用时间戳，也没有Encoded值，而是直接指定一个数字。
+-ROOT- 表永远只有一个Region，也就只会存放在一台RegionServer上。—— 在进行数据访问时，需要知道管理 -ROOT- 表的RegionServer的地址。这个地址被存在 ZooKeeper 中。
+
+
+
+
+
+
+
+
+
+
+
+
