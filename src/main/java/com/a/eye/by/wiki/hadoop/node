@@ -53,3 +53,15 @@ log,减少NN启动时间。 – SNN执行合并时机
 • 修改masters文件和slaves文件 • 格式化namenode
 • Start-hdfs.sh启动
 
+八、Namenode的两大功能
+1、获取客户端的读写服务
+2、存储元数据，包括fsimage和edit文件
+fsimage是namenode格式化的时候产生的，edit是客户端读写上传下载文件时产生的
+
+
+
+
+
+
+
+
