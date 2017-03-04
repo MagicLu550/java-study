@@ -1,0 +1,55 @@
+一、NameNode
+NameNode主要功能:接受客户端的读写服务
+– NameNode保存metadate信息包括 
+• 文件owership和permissions
+• 文件包含哪些块
+• Block保存在哪个DataNode(由DataNode启动时上报)
+– NameNode的metadate信息在启动后会加载到内存 
+• metadata存储到磁盘文件名为”fsimage”
+• Block的位置信息不会保存到fsimage 
+• edits记录对metadata的操作日志
+
+二、SecondaryNameNode(SNN)
+它不是NN的备份(但可以做备份),它的主要工作是帮助NN合并edits
+log,减少NN启动时间。 – SNN执行合并时机
+• 根据配置文件设置的时间间隔fs.checkpoint.period 默认3600秒
+• 根据配置文件设置editslog大小fs.checkpoint.size规定edits文件的最大值默认是64MB
+
+三、DataNode(DN)
+– 存储数据(Block)
+– 启动DN线程的时候会向NN汇报block信息
+– 通过向NN发送心跳保持与其联系(3秒一次),如果NN10分钟没有收
+到DN的心跳,则认为其已经lost,并copy其上的block到其它DN
+
+四、Block的副本放置策略
+– 第一个副本:放置在上传文件的DN; 如果是集群外提交,则随机挑选一台磁盘不太满,CPU不太忙的节点。
+– 第二个副本:放置在于第一个副本不同的机架的节点上。
+– 第三个副本:与第二个副本相同机架的节点。
+– 更多副本:随机节点
+
+五、HDFS文件权限
+– 与Linux文件权限类似
+• r:read;w:write;x:execute,权限x对于文件忽略,对于文件夹表示是否允许
+访问其内容
+– 如果Linux系统用户zhangsan使用hadoop命令创建一个文件,那么这个
+文件在HDFS中owner就是zhangsan。
+– HDFS的权限目的:阻止好人错错事,而不是阻止坏人做坏事。HDFS 相信,你告诉我你是谁,我就认为你是谁。
+
+六、安全模式
+– namenode启动的时候,首先将映像文件(fsimage)载入内存,并执行编辑日志(edits)中的各
+项操作。
+– 一旦在内存中成功建立文件系统元数据的映射,则创建一个新的fsimage文件(这个操作不
+需要SecondaryNameNode)和一个空的编辑日志。
+– 此刻namenode运行在安全模式。即namenode的文件系统对于客服端来说是只读的。(显示
+目录,显示文件内容等。写、删除、重命名都会失败)。
+– 在此阶段Namenode收集各个datanode的报告,当数据块达到最小副本数以上时,会被认 为是“安全”的, 在一定比例(可设置)的数据块被确定为“安全”后,再过若干时间,安 全模式结束
+– 当检测到副本数不足的数据块时,该块会被复制直到达到最小副本数,系统中数据块的位 置并不是由namenode维护的,而是以块列表形式存储在datanode中。
+
+七、HDFS安装
+完全分布式安装 • 下载
+• 解压
+• 检查java和ssh的免密码登陆 • 修改core-site.xml
+• 修改hdfs-site.xml
+• 修改masters文件和slaves文件 • 格式化namenode
+• Start-hdfs.sh启动
+
