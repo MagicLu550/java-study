@@ -42,16 +42,19 @@ log,减少NN启动时间。 – SNN执行合并时机
 需要SecondaryNameNode)和一个空的编辑日志。
 – 此刻namenode运行在安全模式。即namenode的文件系统对于客服端来说是只读的。(显示
 目录,显示文件内容等。写、删除、重命名都会失败)。
-– 在此阶段Namenode收集各个datanode的报告,当数据块达到最小副本数以上时,会被认 为是“安全”的, 在一定比例(可设置)的数据块被确定为“安全”后,再过若干时间,安 全模式结束
-– 当检测到副本数不足的数据块时,该块会被复制直到达到最小副本数,系统中数据块的位 置并不是由namenode维护的,而是以块列表形式存储在datanode中。
+– 在此阶段Namenode收集各个datanode的报告,当数据块达到最小副本数以上时,会被认为是“安全”的, 在一定比例(可设置)的数据块被确定为“安全”后,再过若干时间,安全模式结束
+– 当检测到副本数不足的数据块时,该块会被复制直到达到最小副本数,系统中数据块的位置并不是由namenode维护的,而是以块列表形式存储在datanode中。
 
 七、HDFS安装
-完全分布式安装 • 下载
+完全分布式安装 
+• 下载
 • 解压
-• 检查java和ssh的免密码登陆 • 修改core-site.xml
+• 检查java和ssh的免密码登陆 
+• 修改core-site.xml
 • 修改hdfs-site.xml
-• 修改masters文件和slaves文件 • 格式化namenode
-• Start-hdfs.sh启动
+• 修改masters文件和slaves文件 
+• 格式化namenode
+• start-hdfs.sh启动
 
 八、Namenode的两大功能
 1、获取客户端的读写服务

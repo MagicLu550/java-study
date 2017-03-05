@@ -2,21 +2,21 @@
 1.	core-site.xml
 2.	hdfs-site.xml
 3.	准备zookeeper
-a)	三台zookeeper：hadoop1，hadoop2，hadoop3
-b)	编辑zoo.cfg配置文件
-i.	修改dataDir=/opt/zookeeper
-ii.	server.1=hadoop1:2888:3888
-server.2=hadoop2:2888:3888
-server.3=hadoop3:2888:3888
-c)	在dataDir目录中创建一个myid的文件，文件内容为1，2，3
+	a)	三台zookeeper：hadoop1，hadoop2，hadoop3
+	b)	编辑zoo.cfg配置文件
+		i.	修改dataDir=/opt/zookeeper
+		ii.	server.1=hadoop1:2888:3888
+		server.2=hadoop2:2888:3888
+		server.3=hadoop3:2888:3888
+	c)	在dataDir目录中创建一个myid的文件，文件内容为1，2，3
 4.	配置hadoop中的slaves
 5.	启动三个zookeeper：./zkServer.sh start
 6.	启动三个JournalNode：./hadoop-daemon.sh start journalnode
 7.	在其中一个namenode上格式化：hdfs namenode -format
 8.	把刚刚格式化之后的元数据拷贝到另外一个namenode上
-a)	启动刚刚格式化的namenode
-b)	在没有格式化的namenode上执行：hdfs namenode -bootstrapStandby
-c)	启动第二个namenode
+	a)	启动刚刚格式化的namenode
+	b)	在没有格式化的namenode上执行：hdfs namenode -bootstrapStandby
+	c)	启动第二个namenode
 9.	在其中一个namenode上初始化zkfc：hdfs zkfc -formatZK
 10.	停止上面节点：stop-dfs.sh
 11.	全面启动：start-dfs.sh
