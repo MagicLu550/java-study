@@ -1,0 +1,46 @@
+一、Map Reduce 四个阶段
+1、	Split：切分
+2、	Mapper：key-value（对象）
+3、	Shuffle：洗牌
+	a)	分区（partition，HashPartition：根据key的hashcode值 和 Reduce的数量 模运算），
+		可以自定义分区，运算速度要快。一定要解决数据倾斜和reduce的负载均衡。
+	b)	排序：默认按照字典排序。WriterCompartor（比较）
+	c)	合并：减少当前mapper输出数据，根据key相同（比较），把 value 进行合并。
+	d)	分组（key相同（比较），value组成一个集合）（merge）
+4、	Reduce
+	a)	输入数据：key + 迭代器
+
+二、Mapper
+Map-reduce的思想就是“分而治之”
+• Mapper负责“分”,即把复杂的任务分解为若干个“简单的任务”执行
+– “简单的任务”有几个含义:
+• 数据或计算规模相对于原任务要大大缩小;
+• 就近计算,即会被分配到存放了所需数据的节点进行计算; 
+• 这些小任务可以并行计算,彼此间几乎没有依赖关系
+
+三、Reducer
+– 对map阶段的结果进行汇总。
+– Reducer的数目由mapred-site.xml配置文件里的项目mapred.reduce.tasks 决定。缺省值为1,用户可以覆盖之
+
+四、Shuffler
+– 在mapper和reducer中间的一个步骤
+– 可以把mapper的输出按照某种key值重新切分和组合成n份,把key值符 合某种范围的输出送到特定的reducer那里去处理
+– 可以简化reducer过程
+
+五、Hadoop计算框架shuffle过程详解
+ 每个maptask都有一个内存缓冲区(默认是100MB),存储着map的输出结果
+– 当缓冲区快满的时候需要将缓冲区的数据以一个临时文件的方式存放到磁盘(Spill)
+– 溢写是由单独线程来完成,不影响往缓冲 区写map结果的线程(spill.percent,默认 是0.8)
+– 当溢写线程启动后,需要对这80MB空间 内的key做排序(Sort)
+
+六、Hadoop计算框架shuffle过程详解
+假如client设置过Combiner,那么现在就是使用Combiner的时候了。将 有相同key的key/value对的value加起来,减少溢写到磁盘的数据量。 (reduce1,word1,[8])。
+– 当整个maptask结束后再对磁盘中这个maptask产生的所有临时文件做 合并(Merge),对于“word1”就是像这样的:{“word1”, [5, 8, 2, ...]},假 如有Combiner,{word1 [15]},最终产生一个文件。
+– reduce 从tasktrackercopy数据
+– copy过来的数据会先放入内存缓冲区中,这里的缓冲区大小要比map端的更为灵活,它基于JVM的heap size设置
+– merge有三种形式:1)内存到内存 2)内存到磁盘 3)磁盘到磁盘。merge从不同tasktracker上拿到的数据,{word1 [15,17,2]}
+– 参考博客http://langyu.iteye.com/blog/992916?page=3#comments
+
+
+
+
