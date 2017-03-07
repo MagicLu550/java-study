@@ -1,0 +1,12 @@
+一、Hdfs的容错性
+1、心跳机制
+	在NameNode和DataNode之间维持着心跳检测
+2、检查文件块的完整性
+	HDFS会记录每个心创建文件的所有块的校验和。当以后要检索这些文件时或者从某个节点获取块时，会首先确认校验和是否一致，如果不一致会从其他的DataNode节点
+	上获取副本。
+3、集群的负载均衡
+	由于节点的增加或者失效，可能导致数据分布不均衡，当某个DataNode节点的空闲空间大于一个临界值时，HDFS会从其他DataNode迁移数据。
+4、NameNode上的FSimage和edit日志文件
+	NameNode上的FSImage和Edit文件是HDFS的核心数据结构。NameNode和SecondaryNameNode会定期备份FSImage和Edit文件
+5、文件的删除
+	删除并不会立马从NameNode移出命名空间，而是存放在/trash目录随可以恢复，知道通过设置的时间才被正式移除。时间可以在hdfs-site.xml中配置。
