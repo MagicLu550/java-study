@@ -28,7 +28,10 @@
 3、单元格的内容是未解析的字节数组。
 由{row key, column( =<family> +<qualifier>), version} 唯一确定的单元。cell中的数据是没 有类型的,全部是字节码形式存贮。
 
-
+五、HLog (WAL Log)
+1、HLog文件就是一个普通的HadoopSequenceFile,SequenceFile的Key是 HLogKey对象,HLogKey中记录了写入数据的归属信息,除了table和 region名字外,
+同时还包括 sequence number和timestamp,timestamp是” 写入时间”,sequence number的起始值为0,或者是最近一次存入文件系 统中sequence number
+2、HLogSequeceFile的Value是HBase的KeyValue对象,即对应HFile中的 KeyValue
 
 
 
