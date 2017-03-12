@@ -1,0 +1,26 @@
+一、 Row Key
+HBase中row key用来检索表中的记录，支持以下三种方式：
+•	通过单个row key访问：即按照某个row key键值进行get操作；
+•	通过row key的range进行scan：即通过设置startRowKey和endRowKey，在这个范围内进行扫描；
+•	全表扫描：即直接扫描整张表中所有行记录。
+在HBase中，row key可以是任意字符串，最大长度64KB，实际应用中一般为10~100bytes，存为byte[]字节数组，一般设计成定长的。
+row key是按照字典序存储，因此，设计row key时，要充分利用这个排序特点，将经常一起读取的数据存储到一块，将最近可能会被访问的数据放在一块。
+举个例子：如果最近写入HBase表中的数据是最可能被访问的，可以考虑将时间戳作为row key的一部分，由于是字典序排序，
+所以可以使用Long.MAX_VALUE - timestamp作为row key，这样能保证新写入的数据在读取时可以被快速命中。
+
+Rowkey:
+1、	大小越小越好
+2、	值根据功能需求决定
+3、	Row最好有散列原则。
+a)	取反
+b)	Hash
+001—020
+001      100 
+002      200
+010      010
+011      110
+
+二、Column Family
+
+不要在一张表里定义太多的column family。目前Hbase并不能很好的处理超过2~3个column family的表。因为某个column family在flush的时候，
+它邻近的column family也会因关联效应被触发flush，最终导致系统产生更多的I/O。感兴趣的同学可以对自己的HBase集群进行实际测试，从得到的测试结果数据验证一下。
