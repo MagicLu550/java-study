@@ -1,0 +1,9 @@
+一、Instrumentation
+Instrumentation类为JVM上运行时的程序提供测量手段。很多工具通过Instrumentation修改方法字节码，实现数据收集的目的。
+这些通过Instrumentation搜集数据的工具不会改变程序的状态和行为。这些良好的工作包括，monitoring agents, profilers, coverage analyzers, 和event loggers。
+
+二、获取Instrumentation接口的方式
+1、启动JVM时指定agent类，这种方式，instrumentation的实例通过agent class的premain方法被传入。
+2、JVM提供了一种当JVM启动完成后启动agent机制，这种情况下，Instrumentation通过agent代码中的agentmain方式传入。
+java agent 在JDK package specification中解释：一个agent 是被作为Jar 文件形式来部署的。在Jar文件中manifest中指定哪个类作为agent类。
+
