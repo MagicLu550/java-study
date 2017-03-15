@@ -1,0 +1,18 @@
+一、JStorm概念
+1、Jstorm是参考Strom的实时流式计算框架，在网络IO、线程模型、资源调度、可用性以及稳定性上做了持续改进。
+2、jstorm可以看成是storm的java增强版本，除了内核用纯java外，还包括了thrift、python、facet ui。从架构上看，其本质是一个基于zk的分布式调度系统。
+
+二、JStrom的应用场景
+1、信息流处理、聚合、分析等
+2、持续计算，实时统计、监控
+3、分布式rpc调用
+
+三、Jstorm在内核上对storm的改进有
+1、模型简化
+2、多维度资源调度
+3、网络通信层改造
+4、采样重构
+5、worker/task内部异步化处理
+6、classload、HA
+
+四、
