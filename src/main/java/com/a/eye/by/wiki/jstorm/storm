@@ -1,0 +1,30 @@
+一、Storm介绍
+storm是一个分布式的、容错的实时计算系统
+
+二、Storm实时低延迟,主要有两个原因
+1、storm进程是常驻内存的,不像hadoop里面是不断的启停的,就没有不断启停的开销。
+2、Storm的数据是不经过磁盘的,都是在内存里面,处理完就没有了,数据的交换经过网络,这样就避免磁盘IO的开销,所以Storm可以很低的延迟。
+
+三、Storm和hadoop的区别
+1、数据来源:HADOOP是HDFS上某个文件夹下的可能是成TB的数据,STORM是实时新增的某一笔数据。
+2、处理过程:HADOOP是分MAP阶段到REDUCE阶段,STORM是由用户定义处理流程, 流程中可以包含多个步骤,每个步骤可以是数据源(SPOUT)或处理逻辑(BOLT)。
+3、是否结束:HADOOP最后是要结束的,STORM是没有结束状态,到最后一步时,就停在那,直到有新数据进入时再从头开始。
+4、处理速度:HADOOP是以处理HDFS上大量数据为目的,速度慢,STORM是只要处理新增的某一笔数据即可，可以做到很快。
+5、适用场景:HADOOP是在要处理一批数据时用的,不讲究时效性,要处理就提交一个JOB,STORM是要处理某一新增数据时用的,要讲时效性。
+6、与MQ对比:HADOOP没有对比性,STORM可以看作是有N个步骤,每个步骤处理完就 向下一个MQ发送消息,监听这个MQ的消费者继续处理。
+
+四、架构:
+– Nimbus
+– Supervisor – Worker
+• 编程模型: – DAG
+– Spout – Bolt
+• 数据传输: – Zmq
+• Zmq也是开源的消息传递的框架,虽然叫mq,但它并不是一个message queue,而是一个封装的比较好的。
+– Netty
+• netty是NIO的网络框架,效率比较高。之所以有netty是storm在apache之后呢, zmq的license和storm的license不兼容的,bolt处理完消息后会告诉Spout。
+
+五、高可用性:
+ – 异常处理
+– 消息可靠性保证机制
+• 可维护性:
+– Storm有个UI可以看跑在上面的程序监控
