@@ -28,3 +28,50 @@ storm是一个分布式的、容错的实时计算系统
 – 消息可靠性保证机制
 • 可维护性:
 – Storm有个UI可以看跑在上面的程序监控
+
+Nimbus
+– 集群管理
+– 调度topology
+• Supervisor – 启停worker
+• Worker
+– 一个JVM进程资源分配的单位 – 启动executor
+• Executor
+– 实际干活的线程
+• Zookeeper
+
+ZK:存储状态信息,调度信息,心跳
+• nimbus:相当于master,storm是master/slave的架构
+– 它负责两个事情,第一个负责管理集群,这些slave都向zookeeper写 信息,然后nimbus通过zk获取这些slave节点的信息,这样nimbus就 知道集群里面有多少个节点,节点处于什么样的状态,都运行着什么 样的任务
+– 第二就是调度topology,当一个topology通过接口提交到集群上面之 后呢,负责把topology里面的worker分配到supervisor上面去执行
+• supervisor:每台机器会起一个supervisor进程,supervisor 就是slave
+– supervisor其实就干一件事情,就是启停worker,当nimbus调用之后 呢,supervisor去把worker启动起来,这样的话worker就可以开始干活了
+
+worker:实际干活的呢是worker,每个机器上面supervisor 会启动很多个worker,每个机器会配置一定的worker,比如 4个worker
+• 一个worker呢,其实就是一个jvm,JVM做什么事情呢,其实 就干两件事情,第一件事情就是启动executor,第二件事情 呢它负责worker与worker之间,比如这里还有worker,这里 还有worker,负责同一个topolopy中worker和worker之间 的传输,task这些数据传输是通过worker来做的,topology 和topology之间呢是没有任何相关性的
+• executor:真正干活的是worker里面的executor
+– worker启动executor,那executor做什么事情呢,executor就是执行 我们的Spout、Bolt里面的nextTuple()、execute()这些回调函数的, 是真正运行的线程
+
+nimbus,如果各个节点都向它汇报,如果nimbus一旦挂了,那就存 在这些个状态信息怎么恢复的问题,各个节点连不上的时候,怎么处理的 问题,所以storm它的做法是各个节点都把状态信息往zk上写,
+因为zk我 们认为是可靠地,这样比如说如果nimbus挂了,那再新起一个nimbus, 它去zk上面去取Supervisor的信息,它就可以立刻知道supervisor处于一 个什么状态,supervisor也一样,
+它不需要与nimbus通信,它的心跳是往 zk上面写的,而它启动task的时候呢,也不是从nimbus上面要task,而是 nimbus把Task放到zookeeper上面去,然后supervisor再去zk上面去读, 
+然后读到task之后呢再去启动task,所以相互之间通过zk做了一个解耦, zk又是高可用的,非常好的,又是集群的方式,达到了一个非常高的稳定 性,这个从架构上来讲的话呢,比hadoop的架构要更先进一些了
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
