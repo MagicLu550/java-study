@@ -8,3 +8,24 @@ DAG计算模型,一个阶段接另一个阶段再接另一个阶段,在这个有
 对于hadoop的job那就会有map和reduce,对于Storm来说的 topology那就会有spout和bolt,在storm中跑的topology就相当于 hadoop里面跑的job一样,它会被提交到storm集群里面去运行,它是打 包运行的一个实例。
 • 那topology和job又有什么不一样的地方呢?最关键的一点就是job它的生 命周期不管运行多少时间,最后它是会结束的,
 topology它的生命周期里 面呢,如果你不kill它呢,它是不会结束的,只有你kill它了,它才会结束, topology它在storm里面要处理的是流式的数据,因为流式的数据本身是 没有尽头的,只有当topology需要下线或者更新的话才会被kill,所以也 可以说是一直运行的job。
+
+
+Tuple
+– get[i]
+– getString[i]
+– getString["name"]
+– Tuple的ID对于Storm的可靠性是非常有用的
+• Stream
+– 每一个Stream都有一个ID,如果没有指定写ID就用的是默认的流,叫 default,每个Spout/Bolt都有一个默认的Stream:default
+– 一个stream中的Tuple有固定的schema
+– 每个spout/bolt都有一个默认的stream:default
+– spout/bolt可以有多个流
+
+有点像Linux和Unix里面的管道一样的,每一个程序呢其实都有一个标准输入和标 准输出,标准输入和标准输出呢就相当于我们这里的stream,不同点呢像我们的 LINUX里面我们的管道,比如说,cat管道给grep,然后管道给wc,这里是一维的 管道,
+Storm可以有多个流的管道,可以有分叉,也可以有汇聚,很多情况下我们 写的storm程序就一个流就是default流。
+
+Spout
+• Spout是什么东西呢?其实它就是产生Tuple的源头,一般从外部数据源如kafka拉 取数据,生成tuple,一般我们使用已有的spout已经足够了,一般你要是想写一 个spout,先去看看Storm现在是不是已经有了,拿来用就可以了,像KafkaSpout, 
+DRPCSpout,RedisSpout
+• Spout它是产生Tuple的源头,Spout它有核心地方就是有个nextTuple()的函数, 每个线程不断调这个回调函数,Spout主动去kafka取数据,然后再用emit方法生 成一个Tuple给后面的bolt进行处理,这里用主动这个词是,因为数据不能打给 storm,
+因为storm没有地方去接这个数据,storm是主动拉来数据的系统,数据 放在消息队列kafka或者Storm自带的DRPC Server中,都是这个概念。
