@@ -1,0 +1,10 @@
+一、Storm计算模型
+DAG计算模型,一个阶段接另一个阶段再接另一个阶段,在这个有向 无环图里面可以灵活的组合,DAG是由Spout和bolt组合起来的,它 们都是节点,边就是stream数据流,数据流里面的数据单元就是Tuple, 而grouping呢就是数据流里面的数据如何做分发。
+– 我们会用wordcount的DAG图长的什么样子的来给大家展示,便于更 好的理解上面的概念,以及关键的点
+
+二、Storm系统架构
+在Storm中最重要的就是一个topology,topology就是对于DAG模型的 一个实现。
+• 一个topology可以理解为一个job,和job有很多相似之处,也有不一样的 地方,相似之处就是一个app得打包,对于底层系统来说是个很关键的抽 象,
+对于hadoop的job那就会有map和reduce,对于Storm来说的 topology那就会有spout和bolt,在storm中跑的topology就相当于 hadoop里面跑的job一样,它会被提交到storm集群里面去运行,它是打 包运行的一个实例。
+• 那topology和job又有什么不一样的地方呢?最关键的一点就是job它的生 命周期不管运行多少时间,最后它是会结束的,
+topology它的生命周期里 面呢,如果你不kill它呢,它是不会结束的,只有你kill它了,它才会结束, topology它在storm里面要处理的是流式的数据,因为流式的数据本身是 没有尽头的,只有当topology需要下线或者更新的话才会被kill,所以也 可以说是一直运行的job。
