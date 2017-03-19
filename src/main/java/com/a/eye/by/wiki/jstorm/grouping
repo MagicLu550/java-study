@@ -1,0 +1,8 @@
+一、storm分组策略
+1、ShuffleGrouping:随机分组，随机分发Stream中的tuple，保证每个Bolt的Task接收Tuple数量大致一致；
+2、FieldsGrouping：按照字段分组，保证相同字段的Tuple分配到同一个Task中；
+3、AllGrouping：广播发送，每一个Task都会受到所有的Tuple；
+4、GlobalGrouping：全局分组，所有的Tuple都发送到同一个Task中，此时一般将当前Component的并发数目设置为1；
+5、NonGrouping：不分组，和ShuffleGrouping类似，当前Task的执行会和它的被订阅者在同一个线程中执行；
+6、DirectGrouping：直接分组，直接指定由某个Task来执行Tuple的处理，而且，此时必须有emitDirect方法来发送；
+7、localOrShuffleGrouping：和ShuffleGrouping类似，若Bolt有多个Task在同一个进程中，Tuple会随机发给这些Task。
