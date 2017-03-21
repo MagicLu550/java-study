@@ -1,0 +1,86 @@
+一、JStorm基本用法
+1、ISpout：数据源头接口，jstorm会不断调用nextTuple方法来获取数据并发射出
+	open：在worker中初始化该ISpout时调用，一般用来设置一些属性：比如从spring容器中获取对应的Bean。
+	close：和open相对应（在要关闭的时候调用）。
+	activate：从非活动状态变为活动状态时调用。
+	deactivate：和activate相对应（从活动状态变为非活动状态时调用）。
+	nextTuple：JStorm希望在每次调用该方法的时候，它会通过collector.emit发射一个tuple。
+	ack：jstorm发现msgId对应的tuple被成功地完整消费会调用该方法。
+	fail：和ack相对应（jstorm发现某个tuple在某个环节失败了）。
+
+2、IBolt：数据处理接口，jstorm将消息发给他并让其处理，完成之后可能整个处理流程就结束了，也可能传递给下一个节点继续执行
+	prepare：对应ISpout的open方法。
+	cleanup：对应ISpout的close方法。
+	execute：处理jstorm发送过来的tuple。
+	
+3、TopologyBuilder：每个jstorm运行的任务都是一个拓扑接口，而builder的作用就是根据配置文件构建这个拓扑结构，更直白就是构建一个网
+	setSpout：添加源头节点并设置并行度。
+	setBolt：添加处理节点并设置并行度
+	
+4、分组策略
+	public T fieldsGrouping(String componentId, String streamId, Fields fields); // 字段分组
+	public T globalGrouping(String componentId, String streamId); // 全局分组
+	public T shuffleGrouping(String componentId, String streamId); // 随机分组
+	public T localOrShuffleGrouping(String componentId, String streamId); // 本地或随机分组
+	public T noneGrouping(String componentId, String streamId); // 无分组
+	public T allGrouping(String componentId, String streamId); // 广播分组
+	public T directGrouping(String componentId, String streamId); // 直接分组
+	
+	// 自定义分组 
+	public T customGrouping(String componentId, CustomStreamGrouping grouping); 
+	public T customGrouping(String componentId, String streamId, CustomStreamGrouping grouping); 
+	public T grouping(GlobalStreamId id, Grouping grouping); 
+	
+5、批量用法：在IBatchSpout中主要实现的接口如下：
+	execute：虽然和IBolt中名字、参数一致，但是增加了一些默认逻辑
+		入参的input.getValue(0)表示批次（BatchId）。
+		发送消息时collector.emit(new Values(batchId, value))，发送的列表第一个字段表示批次（BatchId）。
+	commit：批次成功时调用，常见的是修改offset。
+	revert：批次失败时调用，可以在这里根据offset取出批次数据进行重试
+	
+二、Trident
+这次一种更高级的抽象（甚至不需要知道底层是怎么map-reduce的），所面向的不再是spout和bolt，而是stream
+1、在本地完成的操作
+	Function 自定义操作
+	Filters 自定义过滤器
+	partitionAggregate 对同批次的数据进行local combiner操作
+	project 只保留stream中指定的field
+	stateQuery、partitionPersist：查询和持久化
+
+2、决定tuple如何分发到下一环节
+	shuffle 随机
+	broadcast：广播
+	partitionBy 以某一个特定的field进行hash，分到某一个分区，这样该field位置相同的都会放到同一个分区
+	global 所有tuple发到指定的分区
+	batchGlobal 同一批的tuple被放到相同的分区
+	partition 用户自定义的分区策略
+	
+3、不同partition处理结果的汇聚操作
+	aggregate：只针对同一批次的数据
+	persistentAggregate：针对所有批次进行汇聚，并将中间状态持久化
+	
+4、对stream中的tuple进行重新分组，后续的操作将会对每一个分组独立进行（类似sql中的group by）
+	groupBy
+
+5、将多个Stream融合成一个
+	merge：多个流进行简单的合并
+	join：多个流按照某个KEY进行UNION操作（只能针对同一个批次的数据）
+	
+
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
