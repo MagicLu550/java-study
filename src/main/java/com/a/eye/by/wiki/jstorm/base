@@ -15,4 +15,49 @@
 5、worker/task内部异步化处理
 6、classload、HA
 
-四、
+四、JStorm中的角色
+1、spout 源头
+2、bolt 处理器
+3、topology 由处理器、源头组成的拓扑网络
+4、tuple 数据
+5、worker 执行进程
+6、task 执行线程
+7、nimbus 分发代码、任务，监控集群的运行状态
+8、supervisor 监听nimbus的指令，接受奋发的代码和执行任务。
+
+五、JStorm用zookeeper来管理，conf/storm.yaml中的常用配置
+1、storm.zookeeper.servers  zookeeper集群地址
+2、storm.zookeeper.root zookeeper中storm的根目录的位置
+3、storm.local.dir 用来存放配置文件、JAR文件
+4、storm.messaging.netty.transfer.async.batch 在使用Netty的时候，设置是否一个batch中会有多个消息
+5、java.library.path 本地库的加载地址，比如zeromq、jzmq等
+6、supervisor.slots.ports supervisor节点上的worker使用的端口号列表
+7、supervisor.enable.cgroup 是否使用cgroups来做资源隔离
+8、topology.buffer.size.limited 是否限制内存，如果不限制将使用LinkedBlockingDeque
+9、topology.performance.metrics 是否开启监控
+10、topology.alimonitor.metrics.post 是否将监控数据发送给AliMonitor
+11、topology.enable.classloader 默认禁用了用户自定义的类加载器
+12、worker.memory.size worker的内存大小
+
+六、JStorm上的topology的生命周期
+1、上传代码并做校验（/nimbus/inbox）
+2、建立本地目录（/stormdist/topology-id/）
+3、建立zookeeper上的心跳目录
+4、计算topology的工作量（parallelism hint），分配task-id并写入zookeeper
+5、把task分配给supervisor执行
+6、在supervisor中定时检查是否有新的task，下载新代码、删除老代码，剩下的工作交个小弟worker
+7、在worker中把task拿到，看里面有哪些spout/Bolt，然后计算需要给哪些task发消息并建立连接
+8、在nimbus将topology终止的时候会将zookeeper上的相关信息删除
+
+七、JStorm中的ACK机制
+1、在消息发、收的过程中会形成一棵树状的结构，在一个消息收的时候发一个验证消息，发的时候也发一个验证消息，那么总体上每个消息出现两次。
+那么ack机制就是将每个消息的随机生成的ID进行异或，如果在某一时刻结果为0，那就说明处理成功。
+2、虽然ack算是随机算法，但是出错的概率极低，但是系统应该具备在出错之后矫正的能力（甚至检查是否出错）。
+ack机制保证了消息会被处理，但是不能保证只处理一次&顺序处理，在需要的情形就有了事务的概念
+
+
+
+
+
+
+
