@@ -1,0 +1,41 @@
+调大系统的"最大打开文件数",建议32K甚至是64K
+– ulimit -a (查看)
+– ulimit -n 32000(设置)
+• 修改配置文件调整ES的JVM内存大小
+– 1:修改bin/elasticsearch.in.sh中ES_MIN_MEM和ES_MAX_MEM的大小,建议设置一样大,避免 频繁的分配内存,根据服务器内存大小,一般分配60%左右(默认256M)
+– 2:如果使用searchwrapper插件启动es的话则修改bin/service/elasticsearch.conf(默认1024M)
+• 设置mlockall来锁定进程的物理内存地址
+– 避免交换(swapped)来提高性能
+– 修改文件conf/elasticsearch.yml
+– boostrap.mlockall: true
+• 分片多的话,可以提升建立索引的能力,5-20个比较合适。
+• 如果分片数过少或过多,都会导致检索比较慢。分片数过多会导致检索时打开比较多的文件,另外也会导 致多台服务器之间通讯。而分片数过少会导至单个分片索引过大,所以检索速度慢。建议单个分片最多存 储20G左右的索引数据,所以,分片数量=数据总量/20G
+• 副本多的话,可以提升搜索的能力,但是如果设置很多副本的话也会对服务器造成额外的压力,因为需要 同步数据。所以建议设置2-3个即可。
+• 要定时对索引进行优化,不然segment越多,查询的性能就越差
+– 索引量不是很大的话情况下可以将segment设置为1
+– curl -XPOST 'http://localhost:9200/aa/_optimize?max_num_segments=1'
+– java代码:client.admin().indices().prepareOptimize("aa").setMaxNumSegments(1).get();
+
+删除文档:在Lucene中删除文档,数据不会马上在硬盘上除去,而是在 lucene索引中产生一个.del的文件,而在检索过程中这部分数据也会参与 检索,lucene在检索过程会判断是否删除了,如果删除了在过滤掉。这样 也会降低检索效率。所以可以执行清除删除文档
+– curl -XPOST 'http://localhost:9200/elasticsearch/_optimize?only_expunge_del etes=true'
+– client.admin().indices().prepareOptimize(" elasticsearch ").setOnlyExpungeDeletes(true).get();
+• 如果在项目开始的时候需要批量入库大量数据的话,建议将副本数设置为 0
+– 因为es在索引数据的时候,如果有副本存在,数据也会马上同步到副 本中,这样会对es增加压力。待索引完成后将副本按需要改回来。这 样可以提高索引效率
+
+去掉mapping中_all域,Index中默认会有_all的域,(相当于 solr配置文件中的拷贝字段text),这个会给查询带来方便,但 是会增加索引时间和索引尺寸
+– "_all":{"enabled":"false"}
+• log输出的水平默认为trace,即查询超过500ms即为慢查询, 就要打印日志,造成cpu和mem,io负载很高。把log输出水 平改为info,可以减轻服务器的压力。
+– 修改ES_HOME/conf/logging.yaml文件
+– 或者修改ES_HOME/conf/elasticsearch.yaml
+
+使用反射获取Elasticsearch客户端
+• 可以使用前面讲的方式通过new获取client
+• 使用反射方式:网上反映这种方式效率明显高于new客户端, 并可避免线上环境内存溢出和超时等问题
+
+• 在使用java代码操作es集群的时候要保证本地使用的es的版本和集群上es
+的版本保持一致。
+• 保证集群中每个节点的JDK版本和es配置一致
+
+Elasticsearch的分片规则
+• elasticsearch在建立索引时,根据id或id,类型进行hash, 得到hash值与该索引的文档数量取余,取余的值即为存入的 分片。
+– 具体源码为:根据OperationRouting类的shardId方法进行分片
