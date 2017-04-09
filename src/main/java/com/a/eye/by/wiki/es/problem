@@ -1,0 +1,25 @@
+一、Elasticsearch脑裂问题
+所谓脑裂问题(类似于精神分裂),就是同一个集群中的不同节点,对于
+ 集群的状态有了不一样的理解。
+• http://blog.csdn.net/cnweike/article/details/39083089 • discovery.zen.minimum_master_nodes
+– 用于控制选举行为发生的最小集群节点数量。推荐设为大于1的数值, 因为只有在2个以上节点的集群中,主节点才是有意义的
+
+二、Elasticsearch中脑裂问题
+正常情况下,集群中的所有的节点,应该对集群中master的 选择是一致的,这样获得的状态信息也应该是一致的,不一致 的状态信息,说明不同的节点对master节点的选择出现了异 常——也就是所谓的脑裂问题。
+这样的脑裂状态直接让节点 失去了集群的正确状态,导致集群不能正常工作。
+
+三、产生的原因
+1.网络:由于是内网通信,网络通信问题造成某些节点认为 master死掉,而另选master的可能性较小
+• 2.节点负载:由于master节点与data节点都是混合在一起的, 所以当工作节点的负载较大时,导致对应的ES实例停止响应, 而这台服务器如果正充当着master节点的身份,
+那么一部分 节点就会认为这个master节点失效了,故重新选举新的节点, 这时就出现了脑裂;同时由于data节点上ES进程占用的内存 较大,较大规模的内存回收操作也能造成ES进程失去响应。
+
+四、Elasticsearch中脑裂解决
+主节点
+• node.master:true
+• node.data:false
+• 从节点
+• node.master:false
+• node.data:true
+• 所有节点
+• discovery.zen.ping.multicast.enabled:false
+• discovery.zen.ping.unicast.hosts:[“master”,“slave1” , “slave2"]
