@@ -1,0 +1,23 @@
+一、PUT和POST用法
+PUT是幂等方法,POST不是。所以PUT用于更新、POST用于
+新增比较合适。
+– PUT,DELETE操作是幂等的。所谓幂等是指不管进行多少次操作,结果都一样。比如我用PUT修改一篇文章,然后在做同样的操作,每次操作后的结果并没有不同,DELETE也是一样。
+– POST操作不是幂等的,比如常见的POST重复加载问题:当我们多次发出同样的POST请求后,其结果是创建出了若干的资源。
+– 还有一点需要注意的就是,创建操作可以使用POST,也可以使用PUT, 区别在于POST是作用在一个集合资源之上的(/articles),而PUT操作是作用在一个具体资源之上的(/articles/123),
+比如说很多资源使用数据库自增主键作为标识信息,而创建的资源的标识信息到底是 什么只能由服务端提供,这个时候就必须使用POST。
+
+二、创建索引注意事项
+1、索引库名称必须要全部小写,不能以下划线开头,也不能包含逗号
+2、如果没有明确指定索引数据的ID,那么es会自动生成一个随机的ID,需要使用POST参数
+
+三、Elasticsearch的插件
+站点插件(以网页形式展现)
+– BigDesk Plugin (作者 Lukáš Vlček)
+– 简介:监控es状态的插件,推荐!
+– Elasticsearch Head Plugin (作者 Ben Birch) – 简介:很方便对es进行各种操作的客户端。
+– Paramedic Plugin (作者 Karel Minařík)
+– 简介:es监控插件
+– SegmentSpy Plugin (作者 Zachary Tong)
+– 简介:查看es索引segment状态的插件
+– Inquisitor Plugin (作者 Zachary Tong)
+– 简介:这个插件主要用来调试你的查询。
