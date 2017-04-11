@@ -2,3 +2,13 @@
 1、只创建一次HTable实例，一般在应用程序开始时创建
 2、为执行的每一个线程（或者锁使用的HTablePool）创建独立的HTable实例
 3、所有的修改操作只保证行级别的原子性。
+
+二、原子性操作
+boolean checkAndPut 检查写
+boolean checkAndDelete 检查删
+
+三、行锁
+region服务器提供了一个行锁（row lock）的特性，这个特性保证了只有一个客户端能获取一行数据相应的锁，同时对该行进行修改。
+服务器端可以隐式加锁，客户端也可以显示的加锁。
+第一个调用lockRow需要提供rowKey作为参数。返回一个RowLock实例，使用完后必须通过unlockRow释放锁。
+
