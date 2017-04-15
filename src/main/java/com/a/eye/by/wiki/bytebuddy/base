@@ -1,0 +1,15 @@
+一、Bytebuddy简介：
+bytebuddy是一个提供了一个API用于生成任意的Java类工具包，给需要编写javaagent的代码用户提供了一个很方便的工具。
+一般来说，如果要编写agent代码一般都是从premain函数开始，然后在启动的时候通过-javaagent命令进行启动，bytebuddy提供了一个动态加载agent方式的api。
+
+动态加载javaagent主要是在程序运行过程中通过 ByteBuddyAgent.install(); 获得 Instrumentation inst 对象，而不是在启动的时候通过加入-javaagent来获得 Instrumentation inst 对象。
+
+ByteBuddyAgent.install();源码里面刚开始就是设置一些默认的配置，接下来就是最关键的代码
+public static synchronized Instrumentation install(AttachmentProvider attachmentProvider, ProcessProvider processProvider) {    
+    Instrumentation instrumentation = doGetInstrumentation();    
+    if (instrumentation != null) {        
+        return instrumentation;    
+    }    
+    install(attachmentProvider, processProvider.resolve(),  AgentProvider.ForByteBuddyAgent.INSTANCE);   
+    return doGetInstrumentation();
+}
