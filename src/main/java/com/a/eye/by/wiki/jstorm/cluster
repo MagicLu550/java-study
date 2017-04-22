@@ -1,0 +1,67 @@
+一、Storm和Hadoop一个非常关键的区别：
+就是Hadoop的MapReduce作业最终会结束，而Strom的Topology会一直运行，除非显示的杀掉。
+
+二、Storm的集群中有两个节点
+1、主节点Nimbus和工作节点Supervisor。Nimbus的作用类似于Hadoop中的JobTracker，Nimbus负责在集群中分发代码，分配工作给机器，并且监控状态。
+每个工作节点上运行一个Supervisor类似于TaskTracker。Supervisor会监听Nimbus分配给那台机器的工作。根据需要启动/关闭具体的Worker进程。每个Worker进程
+执行一个具体的Topology，Worker进程中的执行线程成为Executor，可以有一个或者多个。每个Executor中又可以包含一个或者多个Task。Task为Storm中最小的处理
+单元。一个运行的Topology由运行在一台或者多台工作节点上的Worker进程来完成具体的业务执行。
+
+三、Storm的容错性
+Nimbus和Supervisor之间的通信依靠Zookeeper完成，并且Nimbus进程和Supervisor都是快速失败fast-fail和无状态的。所有的状态要么在Zookeeper里面，要么在
+本地磁盘上。
+
+四、Storm整体架构图
+Nimbus->Zookeeper->Supervisor->Worker->Executor->Task
+
+五、基本核心概念
+1、Topology：一个实时计算应用程序上被封装在Topology对象中，类似Hadoop中的作业，与作业不同的是，Topology会一直运行知道显示的杀死它。
+2、Nimbus：负责资源分配和任务调度，类似Hadoop的JobTracker
+3、Supervisor：负责接收Nimbus分配的任务，启动和停止属于自己管理的Worker进程，类似Hadoop中的TaskTracker。
+4、Worker：运行具体处理组件逻辑的进程
+5、Executor：Executor为Worker进程中的具体的物理线程，同一个Spout/Bolt的Task可能会共享一个物理线程，一个Executor中只能运行隶属于同一个Spout/bolt
+的Task
+6、Spout：在Topology中产生的源数据流的组件，通常Spout获取数据源的数据，例如kafka。然后调用nextTuple函数，发射数据供Bolt消费。
+7、Bolt：在Topology中接受Spout的数据然后执行处理的组件。Bolt可以执行过滤、函数操作、合并、写数据库等任何操作，Bolt可以接收到消息后悔调用execute函数
+用户可以在其中执行自己想要的操作。
+8、Tuple:消息传递的基本单元
+9、Stream：圆圆不断传递的Tuple组成了Stream
+10、Stream分组：即消息的分区partition方法，Storm中提供若干种使用的分组方式。包括Shuffle、Fields、All、Global、None、Direct和Local or Shuffle等。
+
+六、分组方式
+Storm中有7中内置分组方式，也可以通过实现CustomStreamGrouping接口来定义自己的分组。
+1、Shuffle分组：Task中的数据随机分配，可以保证同一级Bolt上的每个Task处理的Tuple数量一致。
+2、Fields：分局Tuple中的某个Field的值来划分。比如Stream根据userId的值来划分，具有相同userId值的Tuple会被分发到相同的Task中。
+3、All分组：所有的Tuple都会分发到所有的Task中
+4、Global分组，整个Stream会选择一个Task作为分发的目的地，通常是具有最新ID的task
+5、None分组：也就是你不关心如何在Task中做Steam分发，目前等同于Shuffle分组。
+6、Direct分组：是一种特殊的分组方式，也就是产生数据的Spout/Bolt自己明确巨鼎这个Tuple被Bolt的那些Task所消费。
+7、Local or Shuffle分组：如果目标Bolt中的一个或者多个Task和当前产生的数据的Task在同一个Worker进程中，那么就走内部的线程间通信，将Tuple直接
+发给在当前Worker进程重点目的Task，否则，同Shuffle分组。
+
+七、Storm的可靠性
+Storm允许用户在Spout中发射一个新的Tuple时为其指定一个MessageId，这个MessageId可以是任意的Object对象。多个Stream Tuple可以共同用一个MessageId，
+表示着多个Stream Tuple对用户来说是同一个消息单元。Storm的可靠性是指Storm会告知用户每一个消息单元是否在一个指定的时间内被完全处理。完全处理的意思是该
+MessageId绑定的StreamTuple以及由该Stream Tuple衍生的所有Tuple都经过了Topology中每个应该到达的Bolt的处理。在Storm中通过Acker来解决Tuple消息
+处理可靠性问题。
+
+八、Storm特点
+1、易用
+2、容错
+3、扩展
+4、完整性
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
