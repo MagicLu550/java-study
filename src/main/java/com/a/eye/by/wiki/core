@@ -22,4 +22,8 @@ Oject类中的equals方法用来比较两个引用值，hashCode用来返回引�
 1、如果两个对象equals，Java运行时环境会认为他们的hashcode一定相等。 
 2、如果两个对象不equals，他们的hashcode有可能相等。 
 3、如果两个对象hashcode相等，他们不一定equals。 
-4、如果两个对象hashcode不相等，他们一定不equals。 
+4、如果两个对象hashcode不相等，他们一定不equals。
+for testsdsdsd
+
+3、如果两个对象hashcode相等，他们不一定equals。
+4、如果两个对象hashcode不相等，他们一定不equals。
