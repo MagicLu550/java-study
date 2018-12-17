@@ -8,3 +8,23 @@
 二、TCP、IP协议
 1、传输控制协议/因特网互联协议。是当前流行的网络传输协议框架。
 2、OSI模型：物理层、数据链路层、网络层、传输层、会话层、表示层、应用层；
+三、影响RPC性能的因素如下：
+1、序列化。常用的RPC序列化协议包括：Thrift、Protobuf、Avro、Kryo、MsgPack、Hessian、Jackson。
+2、传输协议。常用的传输协议包括：HTTP、Socket、TCP、UDP等；
+3、连接。连接包括：长连接、短链接；
+4、IO模型。常用的网络IO模型：同步阻塞IO、同步非阻塞IO、IO多路复用、异步IO；
+注释：stub一般翻译成存根，即在本地存在一个和远程一样的方法；
+四、Protobuf
+protobuf是一个高性能、易扩展的序列化框架，通常是rpc调用追求高性能的首选。结合Netty可以非常便捷的实现RPC调用。Protobuf比JSON、XML更快、更轻、更小
+，并且可以跨平台。Protobuf首先要编写proto文件，即IDL文件，后缀为“.proto”的文件。然后通过客户端生成Java相关类进行序列化、反序列化。
+五、Rest
+Rest是Representaitional State Transfer的缩写，通常翻译成“表现层状态转换”；
+1、协议：API基于HTTP协议；
+2、域名：需要一个域名例如：http://api.xx.com;
+3、版本：需要版本信息，例如http://api.xx.com/v1/
+4、路径：rest开发又被称作是面向资源的开发。例如http://api.xx.com/v1/user/
+5、方法：一般包含的方法包括：get（获取资源，一个或者多个）；post（创建资源）；put（修改资源，客户端提供修改后的完整资源）；
+patch（对已知资源进行全局更新，客户端需要提供改变的属性）；delete（删除，回收资源）；head（获取资源的元数据）；option（读取对资源的访问权限）；
+注释：SLA：需要提供相应时间、吞吐量、可用性等关键指标；
+六、HTTP/2协议
+HTTP/2对比HTTP/1.x进行了大量简化，使得性能大幅提升；HTTP/2是基于二进制协议的。
