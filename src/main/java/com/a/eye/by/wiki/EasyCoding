@@ -60,7 +60,7 @@ Borker：Kafka的服务端，负责接收数据，并持久化数据，Broker可
 Producer：生产者，生成数据发送到Broker存储数据，Producer将会和Topic下所有Partition Leader保持连接。
 Consumer：消费者，每个Partition只能被一个消费者订阅，一个消费者可以订阅多个Partition，消费者挂掉后会从新进行负载均衡。
 Topic：主题，每个Topic包含多个Partition，所有的元数据都存储在ZooKeeper中。
-Partition：分区，Kafka
+Partition：分区，Kafka为了扩展性，可以将一个Topic拆分为多个分区，每个分区可以独立放到一个Broker上。
 
 
 
